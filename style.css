@@ -11,6 +11,7 @@ html{
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 .nav-box{
+    width: 100%;
     grid-column: span 5;
     height: 1%;
     border-style: solid;
@@ -34,6 +35,7 @@ html{
     border-color: lightgray;
     border-style: solid;
     border-top: 0;
+
 }
 .meny-container{
     display: grid;
@@ -60,9 +62,7 @@ html{
 
 #cart{
     margin-top: 10rem;
-    margin-left: 1rem;
     margin-right: 1rem;
-
     font-weight: 700;
     border: 2px solid black;
     border-radius: 5px;
@@ -86,10 +86,10 @@ html{
     justify-content: space-around;
     font-family: 'Space Grotesk', sans-serif;
     float: left;
-
 }
 
 #irishDuck{
+    position: fixed;
     display: flex;
     justify-self: left;
     margin-left: 2rem;
@@ -120,11 +120,9 @@ h2{
     font-family:"'Poppins', sans-serif";
 }
 
- p{
+p{
     text-align: center;
     margin: 8px;
-    margin-bottom: 15px;
-    
   }
 
 #video-bg{
@@ -165,14 +163,7 @@ input[type=button]:hover
     background-color: whitesmoke;
     cursor: pointer;
 }
-span {
-    margin: 0px;
-    padding: 0px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 19pt;
-    font-weight: bold;
-    text-align: center;
-}
+
 .filter-container{
 
     display: block;
@@ -213,8 +204,7 @@ span {
     border: 1.5px dashed black;
     box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.2);
     padding: 10px 40px 10px 40px;
-    right: 0;
-    left: auto;
+   text-align: left;
 }
 
 
