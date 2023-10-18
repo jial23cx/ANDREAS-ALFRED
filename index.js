@@ -1,13 +1,14 @@
-
-var data="";
+var data = [];
 let sumTotal =0;
 let cartItems =[];
+var meatTypes = []; 
+var fullMenu =[];
+var allergiesInput = []; //all allergies in an list
 let divCart;
 var svDropDown=document.getElementById("sv")
 var enDropDown=document.getElementById("en")
 var foodCard=document.querySelector(".meny-container");
 document.querySelector("h2").style.fontFamily="'Poppins', sans-serif";
-document.querySelector("h3").style.fontFamily="'Poppins', sans-serif";
 const labelVeg=document.querySelector("#label1");
 const labelVeg2=document.querySelector("#label2");
 const labelVeg3=document.querySelector("#label3");
@@ -36,9 +37,162 @@ fetch('food.json').then((response) => {
 
 .then((data) => {
 console.log(data);
+fullMenu=data;
+currentFood = data;  
+
+const veggiBox = document.getElementById('veg'); 
+const chickenBox = document.getElementById('chicken'); 
+const beefBox = document.getElementById('beef'); 
+const porkBox = document.getElementById('pork'); 
+const seaBox = document.getElementById('sea'); 
+const glutenBox = document.getElementById('glu');
+const lactoseBox = document.getElementById('laktos');
+const placeForFood = document.getElementById('placeHolderForFood');
 
 
+//----------------------ELINS BOXAR---------------------------
+// add eventlisteners to all the filterboxes . They should each add values to an filterArray
+porkBox.addEventListener("change", () =>{ 
+  //when change: if veggiebox already checked put it in the foodlist 
+  if(porkBox.checked){ 
+        addMeattype("pork");  
+        filterFoodList();        
+  } else{ //else remove it from the list 
+    removeMeattype("pork");
+    filterFoodList();
+  } 
+});
+// add eventlisteners to all the filterboxes . They should each add values to an filterArray
+seaBox.addEventListener("change", () =>{ 
+  //when change: if veggiebox already checked put it in the foodlist 
+  if(seaBox.checked){ 
+        addMeattype("seafood");  
+        filterFoodList();        
+  } else{ //else remove it from the list 
+    removeMeattype("seafood");
+    filterFoodList();
+  } 
+});
 
+
+beefBox.addEventListener("change", () =>{ 
+  //when change: if veggiebox already checked put it in the foodlist 
+  if(beefBox.checked){ 
+        addMeattype("beef");  
+        filterFoodList();        
+        
+  } else{ //else remove it from the list 
+    removeMeattype("beef");
+    filterFoodList();
+  } 
+});
+
+veggiBox.addEventListener("change", () =>{ 
+  //when change: if veggiebox already checked put it in the foodlist 
+  if(veggiBox.checked){ 
+        addMeattype("vegetarian");  
+        filterFoodList();
+        console.log(currentFood);
+        
+        
+  } else{ //else remove it from the list 
+    removeMeattype("vegetarian");
+    filterFoodList();
+  } 
+}); 
+// add eventlisteners to all the filterboxes . They should each add values to an filterArray
+chickenBox.addEventListener("change", () =>{ 
+  //when change: if veggiebox already checked put it in the foodlist 
+  if(chickenBox.checked){ 
+        addMeattype("chicken");  
+        filterFoodList();
+     
+  } else{ //else remove it from the list 
+    removeMeattype("chicken");
+    filterFoodList();
+  } 
+}); 
+
+
+lactoseBox.addEventListener("change", () => {
+  //add to list, else remove from list
+  if(lactoseBox.checked){ 
+    addAllergie("lactose"); 
+    filterFoodList();
+  } 
+  else{ 
+    removeAllergie("lactose");
+    filterFoodList();
+  } 
+}); 
+glutenBox.addEventListener("change", () => {
+  //add to list, else remove from list
+  if(glutenBox.checked){ 
+    addAllergie("gluten"); 
+    filterFoodList();
+  } 
+  else{ 
+    removeAllergie("gluten");
+    filterFoodList();
+  } 
+}); 
+
+//functions to add or remove allergies from allergielist 
+function addAllergie(allergie){
+  //add to list 
+      allergiesInput.unshift(allergie);
+      filterFoodList();
+}
+function removeAllergie(allergie){
+//remove the allergie from list
+  const indexOfAllergie = allergiesInput.indexOf(allergie); 
+  allergiesInput.splice(indexOfAllergie, 1); 
+  filterFoodList();
+  }
+
+//funtions for meattypes
+function addMeattype(meatofchoice){
+//add to list 
+meatTypes.unshift(meatofchoice);
+console.log(meatTypes);
+}
+
+function removeMeattype(meatofchoice){
+//remove the allergie from list
+const indexOfMeat = meatTypes.indexOf(meatofchoice); 
+meatTypes.splice(indexOfMeat, 1); 
+}
+
+
+ //modify the current foodlist with current filters
+ function filterFoodList(){
+foodCard.innerHTML=""
+  let filteredFood =fullMenu;
+console.log(filteredFood) ;
+console.log( "i filterfood, steg 1");
+//first remove all food with any of allergie of choice
+  allergiesInput.forEach((allergie) => {
+    filteredFood = filteredFood.filter((food) => {
+      console.log(filteredFood);
+      console.log("i filterfood, steg 2 när den precis ska filtrerea bort allergi");
+      return !food.allergies.includes(allergie);
+    });
+  })
+  // Filtering foods by selectedMeat
+  filteredFood = filteredFood.filter((food) => {
+    console.log(filteredFood);
+    console.log("i filterfood, steg 3, när den ska filtrera fram köttval");
+    console.log("köttval:");
+    console.log(meatTypes);
+    return meatTypes.some(selectedMeat => food.meatTypes.includes(selectedMeat));
+  });
+data=filteredFood;
+console.log(data);
+translateSwedish(filteredFood);
+ }
+
+
+//-------------------------------------------A+A Börjar här---------------------
 //---------------------------------------Translate to English function
 function translateEnglish(){
   htmlElement.setAttribute("lang", "en"); 
@@ -55,15 +209,16 @@ function translateEnglish(){
     const priceDisplay=document.createElement("span");
     let timesCourse=0;
   
+
     const newClassName = 'custom-font';
     const spans = document.querySelectorAll('span');
-    
-    spans.forEach(span => {
-        span.classList.add(newClassName);
-    
-        buyButton.classList.add(newClassName);
-    });
 
+    spans.forEach(span => {
+    span.classList.add(newClassName);
+
+    buyButton.classList.add(newClassName);
+});
+    
 
     foodCard.appendChild(foodTD);
     foodTD.appendChild(newTitle).style.fontFamily="'Poppins', sans-serif";
@@ -162,14 +317,16 @@ function translateEnglish(){
 }
 
 //-----------------------------------Translate to Swedish Function
-function translateSwedish(){
+  function translateSwedish(bajs){
+  console.log(data);
   htmlElement.setAttribute("lang", "sv"); 
   h1menu.innerHTML = 'Lucky<br>Duck';
 
-  data.forEach(function(currentValue,index){
+  bajs.forEach(function(currentValue,index){
     const foodTD=document.createElement("div");
     const newTitle=document.createElement("h2");
     const newDescription=document.createElement("p");
+
     const menuChoice=document.createElement("div");
     const buyButton=document.createElement("input");
     const deleteButton=document.createElement("input");
@@ -190,13 +347,13 @@ spans.forEach(span => {
 });
 
 
-  
     foodCard.appendChild(foodTD);
     foodTD.appendChild(newTitle).style.fontFamily="'Poppins', sans-serif";
     newDescription.innerHTML=currentValue.description.sv;
     foodTD.appendChild(newDescription).style.fontFamily="'Poppins', sans-serif";
     newDescription.appendChild(menuChoice);
     foodCard.appendChild(foodTD);
+
     menuChoice.appendChild(buyButton);
     menuChoice.appendChild(timesCourseDisplay);
     menuChoice.appendChild(deleteButton);
@@ -329,10 +486,27 @@ function checkLanguage() {
   
 
 
+//Sortera efter pris
+
+
+// function sortedPrise(){
+//   const sortedFoods = data.sort((a, b) => (a.price > b.price ? 1 : -1));
+//   console.log(sortedFoods);
+// }
+
+// sortedPrise()
+
+// function sortedPrise2(){
+//   const sortedFoods = data.sort((a, b) => (a.price > b.price ? -1 : 1));
+//   console.log(sortedFoods);
+// }
+
+// sortedPrise2()
+
+
 
 
 }).catch(function(error){
   console.error("something went wrong with retriving data")
   console.log(error)
 })
-//hejsan
